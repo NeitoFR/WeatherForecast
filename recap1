@@ -1,0 +1,56 @@
+PROJECT : WEATHER FORECAST APP
+
+Le but du projet :
+- Créer une page meteo avec JAVASCRIPT
+
+- Utiliser les API pour aller chercher la meteo d'une ville spécifique 
+
+Structure :
+
+- Creer une page HTML avec un formulaire 
+		=> les visiteurs entreront une ville et la meteo de cette ville sortira en résultat
+
+- Utiliser JAVASCRIPT pour récupérer les previsions meteo d'une ville et modifier la page HTML pour l'afficher
+
+- Possibilité d'utiliser JQUERY (pour manipuler le DOM) et BOOTSRAP (pour décorer la page)
+
+ Comment :
+
+ - Pour récupérer les prévisions méteo d'une ville, il faut utiliser deux API :
+
+ 	* Une API pour récupérer les coordonnées GPS de la ville (OPEN CAGE GEOCODER)
+ 	* Une autre API qui avec les coordonnées GPS récupérera les prévision méteo des 7 prochains jours (OPEN WEATHER APP)
+
+ - Pour envoyer une demande à une API et gérer la réponse sans raffraichir la page => utiliser la mether GET de JQUERY
+
+ - Regrouper les informations en 5 temps : 
+ 	* Clear
+ 	* Snow
+ 	* Clouds (> 50 % de nuage)
+ 	* Cloudy (0 < nuageux < 50 %)
+ 	* Rain (autres cas y compris l'orage, le brouillard etc..)
+
+ But du projet :
+
+ - Comment formater une URL 
+ - Comment utiliser les données de la reponse d'une API
+
+
+STEP1 : 
+
+- Avec la ville donné par l'utilisateur => récupérer la prévision méteo du jour et l'afficher sur le page HTML sous forme d'icone avec le jour
+
+
+STEP2 :
+
+- Donner les previsions pour les 5 prochains jours
+
+STEP3 :
+
+- Donner le choix à l'utilisateur sur combien de jours souhaite t-il les previsions (entre 1 et 5) 
+
+BONUS : 
+
+- En utilisant l'API Sunrise Sunset, faire en sorte que s'il fait nuit dans la ville demandé la page switchera en "night mode"
+
+
