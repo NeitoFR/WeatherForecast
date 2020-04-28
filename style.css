@@ -1,0 +1,66 @@
+*{
+	font-family: "Rimouski";
+}
+
+body{
+	background-color: #293251;
+} 
+
+img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 10%;
+
+}
+
+.conteneur1 {
+	width: 600px;
+	background-color: #FFF;
+
+	display: block;
+	margin: 0 auto;
+
+	border-radius: 10px;
+	padding-bottom: 100px;
+}
+
+.app-title {
+
+	border-radius: 10px 10px 0 0;
+
+}
+
+.app-tile p {
+	text-align: center;
+	padding: 15px;
+	margin: 0 auto;
+	font-size: 1.2em;
+	color: #293251;
+}
+
+.submit {
+	padding: 5px;
+	color: black;
+	border-radius: 5px;
+
+}
+
+#inputValue {
+	border-radius: 5px;
+	margin: 15px;
+}
+
+.displayDay {
+	display: flex;
+}
+
+.conteneur2 {
+	display: flex;
+
+}
+
+.days {
+	padding: 5px;
+	margin: 5px;
+}
