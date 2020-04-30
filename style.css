@@ -15,6 +15,10 @@ img {
 
 }
 
+.hidden {
+	display: none;
+}
+
 .conteneur1 {
 	width: 600px;
 	background-color: #FFF;

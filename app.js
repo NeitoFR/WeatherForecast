@@ -1,10 +1,10 @@
 $(document).ready(() => {
 	const button = document.querySelector('.submit')
-	const conteneur = document.querySelector('.conteneur2')
+	const conteneur = document.querySelector('.calendar')
 	const container = document.querySelector('.displayDay')
 
 	const key1 = '4ca0d0dfe6ec424cb9d72bc2a80e1f1d';
-	const dayList = [
+	var dayList = [
 		"Sunday",
 		"Monday",
 		"Tuesday",
@@ -12,16 +12,25 @@ $(document).ready(() => {
 		"Thursday",
 		"Friday",
 		"Saturday"
-	]
-		;
+	];
 
 
 	button.addEventListener('click', getCityCoordinate);
 
 	function getCityCoordinate(event) {
 
+		dayList = [
+			"Sunday",
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday"
+		];
+
 		var input = document.getElementById('inputValue').value;
-		console.log(input);
+		// console.log(input);
 
 		conteneur.innerHTML = "";
 
@@ -38,8 +47,8 @@ $(document).ready(() => {
 
 			input = "";
 
-			console.log(lat);
-			console.log(lng);
+			// console.log(lat);
+			// console.log(lng);
 
 
 			getWeather(lat, lng);
@@ -48,7 +57,7 @@ $(document).ready(() => {
 		event.preventDefault();
 
 	}
-
+	
 	function getIcon(weather, cloudiness) {
 		switch (weather) {
 			case "Clear":
@@ -67,7 +76,9 @@ $(document).ready(() => {
 
 	}
 	const key2 = 'dfe4987b3df1347984efa6ad81e18757';
-
+	function isDisplay(i, nb) {
+		return i > nb ? "hidden" : "";
+	}
 	function getWeather(lat, lng) {
 
 		url = 'https://api.openweathermap.org/data/2.5/onecall?' + 'lat=' + lat + '&lon=' + lng + '&appid=' + key2;
@@ -77,106 +88,26 @@ $(document).ready(() => {
 		request.onload = function () {
 			var data = JSON.parse(this.response);
 
-			dayList.forEach((day, i) => {
-				console.log(data['daily'][i]['weather'][0]['main'], data['daily'][i]['clouds']);
-				var weather = data['daily'][i]['weather'][0]['main'];
+			var tempDay = dayList.splice(0, new Date().getDay());
+			// console.log(tempDay);
 
+
+			dayList.concat(tempDay).forEach((day, i) => {
+				// console.log(data['daily'][i]['weather'][0]['main'], data['daily'][i]['clouds']);
+				var weather = data['daily'][i]['weather'][0]['main'];
 				var cloudiness = data['daily'][i]['clouds'];
+				var dayToDisplay = $("#days").val()
 				$('.calendar').append($([
-					"<div class='dayDisplay'>",
+					"<div class='dayDisplay " + isDisplay(i, dayToDisplay - 1) + "'  >",
 					"	<div class='dayname'>" + day + "</div>",
 					"	<div class='icon'>",
-					"		<img src='weather_icons/" + getIcon(data['daily'][i]['weather'][0]['main'], data['daily'][i]['clouds']) + ".svg' alt='' srcset='' width='100px' height='100px'>",
-					// "		<img src='weather_icons/" + getIcon(weather, cloudiness) + ".svg' alt='' srcset=''>",
+					// "		<img src='weather_icons/" + getIcon(data['daily'][i]['weather'][0]['main'], data['daily'][i]['clouds']) + ".svg'>",
+					"		<img src='weather_icons/" + getIcon(weather, cloudiness) + ".svg' alt='' srcset=''>",
 					"	</div>",
 					"</div>"
 				].join("\n")));
 			});
-			// for (var i = 0; i < 7; i++) {
-			// 	var longueur = data['daily'].length
-
-			// 	var weather = data['daily'][i]['weather'][0]['main'];
-
-			// 	var cloudiness = data['daily'][i]['clouds'];
-			// 	var weatherDate = data['daily'][i]['dt'];
-
-
-			// 	if (weather === "Clear") {
-
-			// 		const clearIcon = document.createElement('img');
-			// 		clearIcon.src = 'weather_icons/sun.svg';
-			// 		conteneur.appendChild(clearIcon);
-
-
-
-			// 	} else if (weather === "Snow") {
-			// 		const snowIcon = document.createElement('img');
-			// 		snowIcon.src = 'weather_icons/snow.svg';
-			// 		conteneur.appendChild(snowIcon)
-
-			// 	} else if (weather === "Clouds") {
-
-			// 		if (cloudiness > 50) {
-			// 			const cloudsIcon = document.createElement('img');
-			// 			cloudsIcon.src = 'weather_icons/clouds.svg';
-			// 			conteneur.appendChild(cloudsIcon)
-
-
-			// 		} else if (0 < cloudiness < 50) {
-			// 			weather = "Cloudy";
-			// 			const cloudyIcon = document.createElement('img');
-			// 			cloudyIcon.src = 'weather_icons/cloudy.svg';
-			// 			conteneur.appendChild(cloudyIcon)
-
-			// 		}
-
-			// 	} else {
-			// 		const rainIcon = document.createElement('img');
-			// 		rainIcon.src = 'weather_icons/rain.svg';
-			// 		conteneur.appendChild(rainIcon)
-
-			// 	}
-
-			// 	console.log(weather);
-			// 	console.log(cloudiness);
-			// 	console.log(weatherDate);
-			// 	console.log(longueur)
-
-
-			// 	getDayOfWeather();
-
-			// }
-
-			// function getDayOfWeather() {
-
-			// 	for (var i = 0; i < 7; i++) {
-			// 		var today = new Date();
-			// 		var day = today.getDay();
-			// 		var dayList = new Array(
-			// 			"Sunday",
-			// 			"Monday",
-			// 			"Tuesday",
-			// 			"Wednesday",
-			// 			"Thursday",
-			// 			"Friday",
-			// 			"Saturday"
-			// 		);
-
-			// 		console.log(dayList[(day + i) % 7])
-
-
-
-			// 	}
-
-			// 	var displayDay = document.createElement('p');
-			// 	displayDay.innerHTML = dayList[(day + i) % 7];
-			// 	container.appendChild(displayDay)
-
-			// }
 		}
-
 	}
-
-
 
 })
