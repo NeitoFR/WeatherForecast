@@ -51,13 +51,41 @@ $(document).ready(() => {
 			// console.log(lng);
 
 
-			getWeather(lat, lng);
+			getWeather(lat, lng).then(data => {
+				console.log(data);
+				if (data.current.sunrise < data.current.dt < data.current.sunset) {
+					$('body').addClass("daytime")
+					$('body').removeClass("nighttime")
+				} else {
+					$('body').addClass("nighttime")
+					$('body').removeClass("daytime")
+				}
+
+				var tempDay = dayList.splice(0, new Date().getDay());
+				dayList.concat(tempDay).forEach((day, i) => {
+					// console.log(data['daily'][i]['weather'][0]['main'], data['daily'][i]['clouds']);
+					var weather = data['daily'][i]['weather'][0]['main'];
+					var cloudiness = data['daily'][i]['clouds'];
+					var dayToDisplay = $("#days").val()
+					$('.calendar').append($([
+						"<div class='dayDisplay " + isDisplay(i, dayToDisplay - 1) + "'  >",
+						"	<div class='dayname'>" + day + "</div>",
+						"	<div class='icon'>",
+						// "		<img src='weather_icons/" + getIcon(data['daily'][i]['weather'][0]['main'], data['daily'][i]['clouds']) + ".svg'>",
+						"		<img src='weather_icons/" + getIcon(weather, cloudiness) + ".svg' alt='' srcset=''>",
+						"	</div>",
+						"</div>"
+					].join("\n")));
+				});
+			}).catch(err => {
+				console.log("ERROR", err);
+			});
 		}
 
 		event.preventDefault();
 
 	}
-	
+
 	function getIcon(weather, cloudiness) {
 		switch (weather) {
 			case "Clear":
@@ -80,34 +108,20 @@ $(document).ready(() => {
 		return i > nb ? "hidden" : "";
 	}
 	function getWeather(lat, lng) {
-
-		url = 'https://api.openweathermap.org/data/2.5/onecall?' + 'lat=' + lat + '&lon=' + lng + '&appid=' + key2;
-		let request = new XMLHttpRequest();
-		request.open('GET', url, true);
-		request.send();
-		request.onload = function () {
-			var data = JSON.parse(this.response);
-
-			var tempDay = dayList.splice(0, new Date().getDay());
-			// console.log(tempDay);
-
-
-			dayList.concat(tempDay).forEach((day, i) => {
-				// console.log(data['daily'][i]['weather'][0]['main'], data['daily'][i]['clouds']);
-				var weather = data['daily'][i]['weather'][0]['main'];
-				var cloudiness = data['daily'][i]['clouds'];
-				var dayToDisplay = $("#days").val()
-				$('.calendar').append($([
-					"<div class='dayDisplay " + isDisplay(i, dayToDisplay - 1) + "'  >",
-					"	<div class='dayname'>" + day + "</div>",
-					"	<div class='icon'>",
-					// "		<img src='weather_icons/" + getIcon(data['daily'][i]['weather'][0]['main'], data['daily'][i]['clouds']) + ".svg'>",
-					"		<img src='weather_icons/" + getIcon(weather, cloudiness) + ".svg' alt='' srcset=''>",
-					"	</div>",
-					"</div>"
-				].join("\n")));
+		return new Promise((resolve, reject) => {
+			$.ajax({
+				type: "GET",
+				url: "https://api.openweathermap.org/data/2.5/onecall",
+				data: 'lat=' + lat + '&lon=' + lng + '&appid=' + key2,
+				success: function (data) {
+					console.log(data);
+					resolve(data);
+				},
+				error: err => {
+					reject(err);
+				}
 			});
-		}
+		})
 	}
 
 })

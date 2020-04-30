@@ -3,7 +3,7 @@
 }
 
 body{
-	background-color: #293251;
+	background-color: #6628a0;
 } 
 
 img {
@@ -18,7 +18,12 @@ img {
 .hidden {
 	display: none;
 }
-
+.daytime {
+	background-color: #b88b37;
+}
+.nighttime {
+	background-color: #293251;
+}
 .conteneur1 {
 	width: 600px;
 	background-color: #FFF;
