@@ -1,36 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
 	<meta charset="utf-8">
 
 	<title>Weather Forecast</title>
-	
-    <link rel="stylesheet" href="font/Rimouski.css">
+
+	<link rel="stylesheet" href="font/Rimouski.css">
 	<link rel="stylesheet" type="text/css" href="style.css">
 
 </head>
 <body>
-	<div class="conteneur1">
-		<div class="app-title"><p>Weather Forecast App</p></div>
+	<div class="app-conteneur">
+
+		<div class="app-title">
+			<p>Weather Forecast App</p>
+		</div>
+
 		<form>
-			<input type="text" placeholder="Enter the city name" id="inputValue">
-			<select id ="days">
-				<option value="1day">1 day</option>
-				<option value="3days">3 days</option>
-				<option value="5days">5 days</option>
-				<option value="7days">7 days</option>
+			<input type="text" placeholder="Enter the city name" id="citiesInput">
+			<select id="daysForecasted">
+				<option value="1">1 day</option>
+				<option value="3">3 days</option>
+				<option value="5">5 days</option>
+				<option value="7">7 days</option>
 			</select>
 			<button class="submit">Submit</button>
 		</form>
 
-		<div class="displayDay"></div>
+		<div class="calendar"></div>
 
-		<div class="conteneur2">
-		</div>
-		
 	</div>
-	  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-	<script type="text/javascript" src="app.js"></script>
+
+	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+	<script src="app.js"></script>
 </body>
 </html>

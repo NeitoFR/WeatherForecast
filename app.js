@@ -1,139 +1,149 @@
-const button = document.querySelector('.submit')
-const conteneur = document.querySelector('.conteneur2')
-const container = document.querySelector('.displayDay')
+// Vérifie si JS est pret pour éxecuter JQuery
+$(document).ready(() => {
+	// On selectionne le bouton et le conteneur(div) calendar
+	const button = document.querySelector('.submit');
+	const weatherDisplayZone = document.querySelector('.calendar');
 
+	// On enregistre les valeurs dans clés dans des variables
+	const openCageKey = '4ca0d0dfe6ec424cb9d72bc2a80e1f1d';
+	const openWeatherMapKey = 'dfe4987b3df1347984efa6ad81e18757';
 
-const key1 = '4ca0d0dfe6ec424cb9d72bc2a80e1f1d';
+/* 	On utilise la méthode addEventListener pour gérer 
+	l'evenement quand l'utilisateur clic sur le bouton Submit */
+	button.addEventListener('click', getCityCoordinates, false);
 
-function getDayOfWeather() {
-
-	for (var i = 0; i < 7; i++) {
-		var today = new Date();
-		var day = today.getDay();
-		var dayList = new Array(
-			"Sunday", 
-			"Monday", 
-			"Tuesday", 
-			"Wednesday", 
-			"Thursday", 
-			"Friday", 
+/* 	On crée une fonction pour récupérer 
+	la latitude et la longitude depuis l'API openCageData */
+	function getCityCoordinates(event) {
+		var dayList = [
+			"Sunday",
+			"Monday",
+			"Tuesday",
+			"Wednesday",               // On crée une liste avec les jours de la semaine
+			"Thursday",
+			"Friday",
 			"Saturday"
-		);
+		];
 
-		console.log(dayList[(day + i) % 7])
-
-
-
-	}
-
-	var displayDay = document.createElement('p');
-	displayDay.innerHTML = dayList[(day + i) % 7];
-	container.appendChild(displayDay)
-	
-}
-
-button.addEventListener('click', getCityCoordinate);
-
-function getCityCoordinate(event) {
-
-	var input = document.getElementById('inputValue').value;
-	console.log(input);
-
-	conteneur.innerHTML = "";
+		// On récupère la valeur du formulaire (la ville indiqué par l'utilisateur)
+		var cityInput = document.getElementById('citiesInput').value;
+		console.log(cityInput);
 
 
-	request_url = 'https://api.opencagedata.com/geocode/v1/json?' +'q=' + input + '&key=' + key1;
+/* 		Nettoyer le DOM des infos de 
+		la ville précédente quand on passe sur une nouvelle ville */
+		weatherDisplayZone.innerHTML = "";
 
-	let request = new XMLHttpRequest();
-	request.open('GET', request_url, true);
-	request.send();
-	request.onload = function()  {
-		var data = JSON.parse(this.response);		
-		var lat = data['results'][0]['geometry']['lat'];
-		var lng = data['results'][0]['geometry']['lng'];
+		// Mettre l'URL de l'API dans une variable
+		request_url = 'https://api.opencagedata.com/geocode/v1/json?' + 'q=' + cityInput + '&key=' + openCageKey;
 
-		input = "";
+		// Récupérer les coordonnées de la ville via l'API
+		let request = new XMLHttpRequest();
+		request.open('GET', request_url, true);
+		request.send();
+		request.onload = function()  {
+			var data = JSON.parse(this.response);
+			var lat = data['results'][0]['geometry']['lat'];
+			var lng = data['results'][0]['geometry']['lng'];
 
-		console.log(lat);
-		console.log(lng);
+			console.log(lat);
+			console.log(lng);
 
-
-		getWeather(lat,lng);
-	}
-
-	event.preventDefault();
-
-}
-
-	
-const key2 = 'dfe4987b3df1347984efa6ad81e18757';
-
-function getWeather(lat,lng) {
-
-	url = 'https://api.openweathermap.org/data/2.5/onecall?' + 'lat=' + lat + '&lon=' + lng + '&appid=' + key2;
-	let request = new XMLHttpRequest();
-	request.open('GET', url, true);
-	request.send();
-	request.onload = function () {
-		var data = JSON.parse(this.response);
-		for (var i = 0; i < 7; i++) {
-			var longueur = data['daily'].length
-		
-			var weather = data['daily'][i]['weather'][0]['main'];
-		
-			var cloudiness = data['daily'][i]['clouds'];	
-			var weatherDate = data['daily'][i]['dt'];
-
-
-			if (weather === "Clear") {
-
-				const clearIcon = document.createElement('img');
-				clearIcon.src = 'weather_icons/sun.svg';
-				conteneur.appendChild(clearIcon);
-				
-
-
-			} else if (weather === "Snow") {
-				const snowIcon = document.createElement('img');
-				snowIcon.src = 'weather_icons/snow.svg';
-				conteneur.appendChild(snowIcon)
-				
-			} else if (weather === "Clouds") {
-
-				if (cloudiness > 50) {
-					const cloudsIcon = document.createElement('img');
-					cloudsIcon.src = 'weather_icons/clouds.svg';
-					conteneur.appendChild(cloudsIcon)
-					
-					
-				} else if (0 < cloudiness < 50) {
-					weather = "Cloudy";
-					const cloudyIcon = document.createElement('img');
-					cloudyIcon.src = 'weather_icons/cloudy.svg';
-					conteneur.appendChild(cloudyIcon)
-					
+						
+			getWeather(lat, lng).then(data => {
+				console.log(data);
+				if (data.current.sunrise < data.current.dt && data.current.dt < data.current.sunset) {
+					$('body').addClass("daytime");
+					$('body').removeClass("nighttime");
+				} else {
+					$('body').addClass("nighttime");
+					$('body').removeClass("daytime");
 				}
 
-			} else {
-				const rainIcon = document.createElement('img');
-				rainIcon.src = 'weather_icons/rain.svg';
-				conteneur.appendChild(rainIcon)
+				console.log(data.current.sunrise );
+				console.log(data.current.dt);
+				console.log(data.current.sunset);
+				console.log(data.current.sunrise < data.current.dt < data.current.sunset);
+				console.log(data.current.dt < data.current.sunset);
+				console.log(data.current.sunrise < data.current.dt);
 				
-			}
+				
+				
+				
 
-		console.log(weather);
-		console.log(cloudiness);
-		console.log(weatherDate);
-		console.log(longueur)
-		
+				// Découper la liste des jours de la semaine et réafficher en fonction de la date du jour
+				var tempDay = dayList.splice(0, new Date().getDay());
+				dayList.concat(tempDay).forEach((day, i) => {
+					// Récupérer le temps, le % de nuage et l'afficher dans le HTML
+					var weather = data['daily'][i]['weather'][0]['main'];
+					var cloudiness = data['daily'][i]['clouds'];
+					var dayToDisplay = $("#daysForecasted").val();
+					$('.calendar').append($([
+						"<div class='dayDisplay " + isDisplay(i, dayToDisplay - 1) + "'  >",
+						"	<div class='dayname'>" + day + "</div>",
+						"	<div class='icon'>",
+						"		<img src='weather_icons/" + getIcon(weather, cloudiness) + ".svg' alt='' srcset=''>",
+						"	</div>",
+						"</div>"
+					].join("\n")));
+				});
+			}).catch(err => {
+				console.log("ERROR", err);
+			});
+		}
 
-		getDayOfWeather();	
+		// Empecher le comportement par défault
+		event.preventDefault();
 
 	}
-	
+	// Fonction qui traite les informations du temps
+	function getIcon(weather, cloudiness) {
+		switch (weather) {
+			case "Clear":
+				return "sun";
+			case "Snow":
+				return "snow";
+			case "Clouds":
+				if (0 < cloudiness < 50) {
+					return "clouds";
+				} else {
+					return "cloudy";
+				}
+			default:
+				return "rain";
+		}
+
+	}
+	// Fonction qui gère l'affichage de la date et des icones en fonction du nombre de jour selectionné
+	function isDisplay(i, nb) {
+		return i > nb ? "hidden" : "";
 	}
 
-}
+	// Fonction qui fait la demarche de requete à l'API via le verbe HTTP GET
+	function getWeather(lat, lng) {
+		return new Promise((resolve, reject) => {
+			$.ajax({
+				type: "GET",
+				url: "https://api.openweathermap.org/data/2.5/onecall",
+				data: 'lat=' + lat + '&lon=' + lng + '&appid=' + openWeatherMapKey,
+				success: function (data) {
+					resolve(data);
+				},
+				error: err => {
+					reject(err);
+				}
+			});
+		})
+	}
 
+})
 
+/* Un callback, est une fonction qui est passé en argument à une autre fonction, 
+ce qui permet à cette derniere de faire usage de cette fonction à n'importe
+quelle fonction alors qu'elle ne la connait pas par avance */
 
+/* Les promesses sont des objets qui retournent la valeur d'une opération asynchrone, 
+elle represente une valeur future. Elles disposent de méthodes permettant 
+de traiter le résultat une fois l'opération accomplie (then() et catch()).
+Les promesses vont permettre de nous affranchir des callback des fonctions, 
+qui sont désormais attachés à la promesse. */
