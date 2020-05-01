@@ -23,7 +23,7 @@ $(document).ready(() => {
 		l'evenement quand l'utilisateur clic sur le bouton Submit */
 	button.addEventListener('click', evt => {
 		// console.log('click');
-
+		resetCalendar();
 		getCityCoordinate(evt).then(data => {
 			console.log('got city coord', data);
 			var lat = data['results'][0]['geometry']['lat'];
@@ -50,7 +50,7 @@ $(document).ready(() => {
 				var tempDay = dayList.splice(0, new Date().getDay());
 				tempDay = dayList.concat(tempDay);
 				console.log('Jour de la semaine réarranger', tempDay);
-				
+
 				tempDay.forEach((day, i) => {
 					// Récupérer le temps, le % de nuage et l'afficher dans le HTML
 					var weather = data['daily'][i]['weather'][0]['main'];
@@ -67,7 +67,7 @@ $(document).ready(() => {
 				});
 			}).catch(err => {
 				console.log("Error getting weather", err);
-			alert("Error getting weather", err); // Indiquer à l'utilisateur qu'il y a eu une erreur pendant la requête
+				alert("Error getting weather", err); // Indiquer à l'utilisateur qu'il y a eu une erreur pendant la requête
 
 			});
 		}).catch(err => {
@@ -122,7 +122,20 @@ $(document).ready(() => {
 	function isDisplay(i, nb) {
 		return i > nb ? "hidden" : "";
 	}
+	function resetCalendar() {
+		dayList = [
+			"Sunday",
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday"
+		];
 
+		document.querySelector('.calendar').innerHTML = "";
+	
+	}
 	// Fonction qui fait la demarche de requete à l'API via le verbe HTTP GET
 	function getWeather(lat, lng) {
 		return new Promise((resolve, reject) => {
