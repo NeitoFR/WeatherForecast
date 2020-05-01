@@ -11,70 +11,69 @@ img {
 	margin-left: auto;
 	margin-right: auto;
 	width: 90%;
-	/* width: 10%; */
-
 }
 
 .hidden {
 	display: none;
 }
+
 .daytime {
-	background-color: #b88b37;
+	background-image:linear-gradient(-90deg, red, yellow);
 }
+
 .nighttime {
-	background-color: #293251;
+	background-image: linear-gradient(-90deg, #051937, #004d7a, #008793, #00bf72, #a8eb12); 
 }
-.conteneur1 {
+
+.app-conteneur {
 	width: 600px;
 	background-color: #FFF;
-
 	display: block;
 	margin: 0 auto;
-
 	border-radius: 10px;
 	padding-bottom: 100px;
+	height: 175px;
 }
 
 .app-title {
-
 	border-radius: 10px 10px 0 0;
-
+	text-align: center;
+	margin-top: 15px;
 }
 
 .app-tile p {
-	text-align: center;
 	padding: 15px;
 	margin: 0 auto;
-	font-size: 1.2em;
 	color: #293251;
 }
 
 .submit {
 	padding: 5px;
-	color: black;
+	color: #293251;
 	border-radius: 5px;
-
+	
 }
 
-#inputValue {
+#citiesInput
+ {
 	border-radius: 5px;
-	margin: 15px;
+	margin: 10px;
+	width: 150px;
 }
 
-.displayDay {
-	display: flex;
-}
-
-.conteneur2 {
-	display: flex;
-
-}
-
-.days {
+.daysForecasted {
 	padding: 5px;
 	margin: 5px;
+	color: #293251;
+	
 }
 
 .calendar {
 	display: flex;
+}
+
+.dayDisplay {
+	text-align: center;
+	margin-top: 15px;
+	margin: 15px auto;
 }
